@@ -5,22 +5,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import taskcli.Task;
 import taskcli.TaskService;
 
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
+    @FXML private HBox toolbar;
     @FXML private TextField inputField;
-    @FXML private DatePicker     duePicker;   
-    @FXML private TextField      tagsField;   
+    @FXML private DatePicker duePicker;
+    @FXML private TextField tagsField;
+
     @FXML private TableView<Task> taskTable;
-    @FXML private TableColumn<Task, Long>   colId;
+    @FXML private TableColumn<Task, Long> colId;
     @FXML private TableColumn<Task, String> colTitle;
     @FXML private TableColumn<Task, String> colDue;
     @FXML private TableColumn<Task, String> colTags;
@@ -32,23 +33,57 @@ public class Controller {
     public void init(TaskService service) {
         this.service = service;
 
-        // Column bindings
-        colId.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().id));
-        colTitle.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().title));
-        colDue.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(
-            c.getValue().due != null
-              ? c.getValue().due.format(DateTimeFormatter.ISO_LOCAL_DATE)
-              : ""
-        ));
-        colTags.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(
-            String.join(", ", c.getValue().tags)
-        ));
-        colStatus.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().status.toString()));
+        // Style the toolbar HBox
+        toolbar.getStyleClass().add("toolbar-card");
 
+        // Bind columns to Task properties
+        colId.setCellValueFactory(c ->
+            new ReadOnlyObjectWrapper<>(c.getValue().id)
+        );
+        colTitle.setCellValueFactory(c ->
+            new ReadOnlyObjectWrapper<>(c.getValue().title)
+        );
+        colDue.setCellValueFactory(c ->
+            new ReadOnlyObjectWrapper<>(
+                c.getValue().due != null
+                    ? c.getValue().due.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                    : ""
+            )
+        );
+        colTags.setCellValueFactory(c ->
+            new ReadOnlyObjectWrapper<>(
+                String.join(", ", c.getValue().tags)
+            )
+        );
+        colStatus.setCellValueFactory(c ->
+            new ReadOnlyObjectWrapper<>(c.getValue().status.toString())
+        );
+
+        // Custom cell to mark DONE cells
+        colStatus.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String status, boolean empty) {
+                super.updateItem(status, empty);
+                if (empty || status == null) {
+                    setText(null);
+                    getStyleClass().remove("status-cell");
+                } else {
+                    setText(status);
+                    if ("DONE".equals(status)) {
+                        if (!getStyleClass().contains("status-cell")) {
+                            getStyleClass().add("status-cell");
+                        }
+                    } else {
+                        getStyleClass().remove("status-cell");
+                    }
+                }
+            }
+        });
+
+        // Make columns resize with window
         taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        taskTable.setItems(tasks);
-
+        // Clear selection when clicking empty space
         taskTable.setRowFactory(tv -> {
             TableRow<Task> row = new TableRow<>();
             row.setOnMouseClicked(evt -> {
@@ -58,6 +93,9 @@ public class Controller {
             });
             return row;
         });
+
+        // Populate and refresh
+        taskTable.setItems(tasks);
         refresh();
     }
 
@@ -66,10 +104,7 @@ public class Controller {
         String title = inputField.getText().trim();
         if (title.isEmpty()) return;
 
-        // 1. Read the due date (may be null)
         LocalDate due = duePicker.getValue();
-
-        // 2. Read & parse the tags field
         String tagText = tagsField.getText().trim();
         List<String> tags = tagText.isEmpty()
             ? List.of()
@@ -78,15 +113,12 @@ public class Controller {
                     .filter(s -> !s.isEmpty())
                     .toList();
 
-        // 3. Perform the add
         service.add(title, "", due, tags);
 
-        // 4. Clear inputs
         inputField.clear();
         duePicker.setValue(null);
         tagsField.clear();
 
-        // 5. Refresh the table
         refresh();
     }
 

@@ -1,26 +1,68 @@
-/* src/main/resources/taskcli/gui/style.css */
+/* 0) Root gradient background */
+.root {
+  -fx-background-color: linear-gradient(to bottom right, #FAFAFA, #E8EAF6);
+}
 
-/* 1) Alternating row stripes */
+/* 1) Toolbar “card” */
+.toolbar-card {
+  -fx-padding: 10;
+  -fx-background-color: white;
+  -fx-background-radius: 8;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+  -fx-border-color: #DDD;
+  -fx-border-radius: 8;
+  -fx-border-width: 1;
+}
+
+/* 2) Icon buttons */
+.icon-button {
+  -fx-background-color: transparent;
+  -fx-cursor: hand;
+}
+.icon-button:hover {
+  -fx-background-color: rgba(0,0,0,0.05);
+}
+
+/* 3) Table header styling */
+.table-view .column-header-background {
+  -fx-background-color: #3F51B5;
+}
+.table-view .column-header,
+.table-view .column-header .label {
+  -fx-text-fill: white;
+  -fx-font-size: 11pt;
+}
+
+/* 4) Alternating row stripes */
 .table-view .table-row-cell:even {
-    -fx-background-color: white;
+  -fx-background-color: white;
 }
 .table-view .table-row-cell:odd {
-    -fx-background-color: #F5F5F5;
+  -fx-background-color: #F5F5F5;
 }
 
-/* 2) Default text color for all cells */
+/* 5) Hover highlight on rows */
+.table-row-cell:hover {
+  -fx-background-color: #E8EAF6;
+}
+
+/* 6) Default cell text & padding */
 .table-cell {
-    -fx-text-fill: black;
+  -fx-text-fill: black;
+  -fx-padding: 0.4em 0.6em;
+}
+.table-view {
+  -fx-font-size: 13pt;
 }
 
-/* 3) Highlight DONE status cells in green */
+/* 7) DONE status cells */
 .table-cell.status-cell {
-    -fx-text-fill: green;
-    -fx-font-weight: bold;
+  -fx-text-fill: green;
+  -fx-font-weight: bold;
 }
 
-/* 4) Ensure selected-row text is visible */
+/* 8) Selected-row text visibility */
 .table-row-cell:selected .table-cell {
-    -fx-background-color: -fx-selection-bar;       /* default selection background */
-    -fx-text-fill: -fx-selection-bar-text;         /* default selection text color */
+  -fx-background-color: -fx-selection-bar;
+  -fx-text-fill: -fx-selection-bar-text;
 }
