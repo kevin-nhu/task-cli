@@ -1,0 +1,26 @@
+/* src/main/resources/taskcli/gui/style.css */
+
+/* 1) Alternating row stripes */
+.table-view .table-row-cell:even {
+    -fx-background-color: white;
+}
+.table-view .table-row-cell:odd {
+    -fx-background-color: #F5F5F5;
+}
+
+/* 2) Default text color for all cells */
+.table-cell {
+    -fx-text-fill: black;
+}
+
+/* 3) Highlight DONE status cells in green */
+.table-cell.status-cell {
+    -fx-text-fill: green;
+    -fx-font-weight: bold;
+}
+
+/* 4) Ensure selected-row text is visible */
+.table-row-cell:selected .table-cell {
+    -fx-background-color: -fx-selection-bar;       /* default selection background */
+    -fx-text-fill: -fx-selection-bar-text;         /* default selection text color */
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="taskcli.gui.Controller">
+
+  <!-- TOP: toolbar with explicit padding block -->
+  <top>
+    <HBox spacing="8">
+      <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+      </padding>
+
+      <!-- Grow this field when window resizes -->
+      <TextField fx:id="inputField"
+                 promptText="Task title…"
+                 HBox.hgrow="ALWAYS"/>
+
+      <DatePicker fx:id="duePicker" promptText="Due date"/>
+      <TextField fx:id="tagsField" promptText="tags (comma-sep)"/>
+
+      <!-- Add button with tooltip child -->
+      <?import javafx.scene.control.Tooltip?>
+      <Button text="+" onAction="#onAdd">
+        <tooltip>
+          <Tooltip text="Add new task"/>
+        </tooltip>
+      </Button>
+      <Button text="✔" onAction="#onMarkDone">
+        <tooltip>
+          <Tooltip text="Mark done"/>
+        </tooltip>
+      </Button>
+      <Button text="🗑" onAction="#onDelete">
+        <tooltip>
+          <Tooltip text="Delete task"/>
+        </tooltip>
+      </Button>
+    </HBox>
+  </top>
+
+  <!-- CENTER: table also with explicit margin if needed -->
+  <center>
+    <TableView fx:id="taskTable">
+      <columns>
+        <TableColumn fx:id="colId"     text="ID"     prefWidth="40"/>
+        <TableColumn fx:id="colTitle"  text="Title"  prefWidth="200"/>
+        <TableColumn fx:id="colDue"    text="Due"    prefWidth="120"/>
+        <TableColumn fx:id="colTags"   text="Tags"   prefWidth="150"/>
+        <TableColumn fx:id="colStatus" text="Status" prefWidth="80"/>
+      </columns>
+      <BorderPane.margin>
+        <Insets top="0" right="10" bottom="10" left="10"/>
+      </BorderPane.margin>
+    </TableView>
+  </center>
+
+</BorderPane>

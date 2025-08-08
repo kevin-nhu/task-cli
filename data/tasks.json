@@ -5,4 +5,11 @@
   "due" : [ 2025, 9, 1 ],
   "status" : "DONE",
   "tags" : [ "home", "bills" ]
+}, {
+  "id" : 3,
+  "title" : "Buy_groceries",
+  "notes" : "",
+  "due" : [ 2025, 9, 15 ],
+  "status" : "OPEN",
+  "tags" : [ "home", "errands" ]
 } ]

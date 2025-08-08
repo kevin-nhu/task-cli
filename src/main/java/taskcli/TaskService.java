@@ -33,4 +33,13 @@ public class TaskService {
         repo.save(t);
         return true;
     }
+
+    public boolean delete(long id) {
+        var all = repo.findAll();
+        boolean removed = all.removeIf(t -> t.id == id);
+        if (removed) {
+            repo.saveAll(all);
+        }
+        return removed;
+    }
 }
